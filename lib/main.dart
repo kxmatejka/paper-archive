@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:nav_router/nav_router.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
+      navigatorKey: navGK,
     );
   }
 }
@@ -35,7 +37,7 @@ class BackupFromState extends State<BackupForm> {
   final _formKey = GlobalKey<FormState>();
   String _content = '';
 
-  void _setContent (String content) {
+  void _setContent(String content) {
     setState(() {
       _content = content;
     });
@@ -49,28 +51,20 @@ class BackupFromState extends State<BackupForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
-            validator: (value) => null,
-            decoration: InputDecoration(
-                labelText: 'name'
-            )),
+              validator: (value) => null,
+              decoration: InputDecoration(labelText: 'name')),
           TextFormField(
             validator: (value) => null,
             onChanged: (text) => _setContent(text),
-            decoration: InputDecoration(
-              labelText: 'content'
-            ),
+            decoration: InputDecoration(labelText: 'content'),
             maxLines: null,
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: ElevatedButton(
-                onPressed: () => print('press'), child: Text('Submit!')),
+                onPressed: () => routePush(PdfPreview(_content), RouterType.material),
+                child: Text('Submit!')),
           ),
-          QrImage(
-            data: _content,
-            version: QrVersions.auto,
-            size: 200,
-          )
         ],
       ),
     );
@@ -85,5 +79,25 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text('Paper Archive'),
         ),
         body: BackupForm());
+  }
+}
+
+class PdfPreview extends StatelessWidget {
+  final String qrCodeData;
+
+  PdfPreview(this.qrCodeData);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('QR'),
+      ),
+      body: QrImage(
+        data: qrCodeData,
+        version: QrVersions.auto,
+        size: 200,
+      ),
+    );
   }
 }
