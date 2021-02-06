@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:nav_router/nav_router.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 void main() => runApp(MyApp());
 
@@ -35,13 +37,12 @@ class BackupForm extends StatefulWidget {
 
 class BackupFromState extends State<BackupForm> {
   final _formKey = GlobalKey<FormState>();
+  String _name = '';
   String _content = '';
 
-  void _setContent(String content) {
-    setState(() {
-      _content = content;
-    });
-  }
+  _setName(String name) => setState(() => _name = name);
+
+  _setContent(String content) => setState(() => _content = content);
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +53,7 @@ class BackupFromState extends State<BackupForm> {
         children: [
           TextFormField(
               validator: (value) => null,
+              onChanged: (text) => _setName(text),
               decoration: InputDecoration(labelText: 'name')),
           TextFormField(
             validator: (value) => null,
@@ -61,9 +63,12 @@ class BackupFromState extends State<BackupForm> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
-            child: ElevatedButton(
-                onPressed: () => routePush(PdfPreview(_content), RouterType.material),
-                child: Text('Submit!')),
+            child: Center(
+                child: ElevatedButton(
+                    onPressed: () => routePush(PrintPdf(_name, _content), RouterType.material),
+                    child: Text('Print')
+                )
+            ),
           ),
         ],
       ),
@@ -82,22 +87,52 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class PdfPreview extends StatelessWidget {
-  final String qrCodeData;
+class PrintPdf extends StatelessWidget {
+  final String _name;
+  final String _data;
 
-  PdfPreview(this.qrCodeData);
+  PrintPdf(this._name, this._data);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('QR'),
-      ),
-      body: QrImage(
-        data: qrCodeData,
-        version: QrVersions.auto,
-        size: 200,
-      ),
-    );
+        body: PdfPreview(
+          build: (format) => _generatePdf(),
+    ));
+  }
+
+  _generatePdf() {
+    String formatedDate = _getCurrentDateInReadableFormat();
+
+    final doc = pw.Document();
+    doc.addPage(pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        build: (context) {
+          return pw.Flex(children: [
+            pw.Flex(
+              children: [
+                pw.Expanded(child: pw.Text(_name, style: pw.TextStyle(fontSize: 18))),
+                pw.Text(formatedDate, style: pw.TextStyle(fontSize: 18))
+              ],
+              direction: pw.Axis.horizontal,
+            ),
+            pw.Container(
+              margin: pw.EdgeInsets.symmetric(vertical: 20),
+              child: pw.Center(
+                  child: pw.BarcodeWidget(
+                      data: _data,
+                      barcode: pw.Barcode.qrCode(),
+                      width: 128,
+                      height: 128))
+            )
+          ], direction: pw.Axis.vertical);
+        }));
+
+    return doc.save();
+  }
+
+  _getCurrentDateInReadableFormat () {
+    var now = new DateTime.now();
+    return now.day.toString() + '.' + now.month.toString() + '. ' + now.year.toString();
   }
 }
