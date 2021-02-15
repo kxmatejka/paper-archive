@@ -1,9 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:nav_router/all_routes.dart';
 import 'package:nav_router/nav_router.dart';
+import 'package:paper_archive/main_pages_navigation.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'main_pages_navigation.dart';
+import 'pages/print_form.dart';
 
+main() => runApp(PaperArchive());
+
+class PaperArchive extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Paper archive',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: MainPagesNavigation(),
+      navigatorKey: navGK,
+    );
+  }
+}
+
+/*
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -136,3 +159,24 @@ class PrintPdf extends StatelessWidget {
     return now.day.toString() + '.' + now.month.toString() + '. ' + now.year.toString();
   }
 }
+
+class QrCodeScanner extends StatefulWidget {
+  @override
+  createState() => _QRCodeScannerState();
+}
+
+class _QRCodeScannerState extends State<QrCodeScanner> {
+  Barcode result;
+  QRViewController controller;
+
+  @override
+  build (BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+
+        ],
+      ),
+    );
+  }
+}*/

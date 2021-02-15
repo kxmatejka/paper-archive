@@ -25,6 +25,7 @@ dependencies:
   nav_router: ^0.0.7
   pdf: ^2.0.0
   printing: ^4.0.0
+  qr_code_scanner: ^0.3.4
   flutter:
     sdk: flutter
 
