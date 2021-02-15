@@ -44,7 +44,7 @@ class _PrintFormState extends State<PrintForm> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        routePush(PrintPreview(), RouterType.material);
+                        routePush(PrintPreview(_name, _content), RouterType.material);
                       }
                     },
                     child: Text('Print'),
