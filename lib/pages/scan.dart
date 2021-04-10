@@ -36,7 +36,8 @@ class _ScanState extends State<Scan> {
             key: qrKey,
             onQRViewCreated: (QRViewController controller) {
               controller.scannedDataStream.listen((event) {
-                print(event);
+                print(event.code);
+                print(event.format);
               });
             },
           ),
