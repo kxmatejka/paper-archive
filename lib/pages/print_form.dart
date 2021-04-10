@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nav_router/nav_router.dart';
+import 'package:get/get.dart';
 import '../page_body.dart';
 import 'print_preview.dart';
 
@@ -44,7 +44,7 @@ class _PrintFormState extends State<PrintForm> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        routePush(PrintPreview(_name, _content), RouterType.material);
+                        Get.to(PrintPreview(_name, _content));
                       }
                     },
                     child: Text('Print'),

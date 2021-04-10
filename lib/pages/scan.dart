@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import '../page_body.dart';
 
 class Scan extends StatefulWidget {
   const Scan({
@@ -29,24 +28,26 @@ class _ScanState extends State<Scan> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: QRView(
-            key: qrKey,
-            onQRViewCreated: (QRViewController controller) {
-              controller.scannedDataStream.listen((event) {
-                print(event.code);
-                print(event.format);
-              });
-            },
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            child: QRView(
+                key: qrKey,
+                onQRViewCreated: (QRViewController controller) {
+                  controller.scannedDataStream.listen((event) {
+                    print(event.code);
+                    print(event.format);
+                  });
+                },
+              ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  @override
+@override
   void dispose() {
     controller?.dispose();
     super.dispose();
