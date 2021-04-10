@@ -10,8 +10,8 @@ class PrintForm extends StatefulWidget {
 
 class _PrintFormState extends State<PrintForm> {
   final _formKey = GlobalKey<FormState>();
-  String _name;
-  String _content;
+  late String _name;
+  late String _content;
 
   _setName(String name) => setState(() => _name = name);
 
@@ -33,7 +33,7 @@ class _PrintFormState extends State<PrintForm> {
               ),
               TextFormField(
                 validator: (value) =>
-                    (value.isEmpty) ? 'Add some content to back up' : null,
+                    (value!.isEmpty) ? 'Add some content to back up' : null,
                 onChanged: (text) => _setContent(text),
                 decoration: InputDecoration(labelText: 'content'),
                 maxLines: null,
@@ -43,8 +43,8 @@ class _PrintFormState extends State<PrintForm> {
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        Get.to(PrintPreview(_name, _content));
+                      if (_formKey.currentState!.validate()) {
+                        Get.to(() => PrintPreview(_name, _content));
                       }
                     },
                     child: Text('Print'),

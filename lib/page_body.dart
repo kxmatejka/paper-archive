@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'pages/scan.dart';
 
 class PageBody extends StatelessWidget {
-  Widget _child;
+  Widget? _child;
 
   PageBody({child}) {
     this._child = child;
@@ -23,7 +23,7 @@ class PageBody extends StatelessWidget {
         iconSize: 30,
         onTap: (index) {
           if (index == 1) {
-            Get.to(Scan());
+            Get.to(() => Scan());
           }
         },
         items: [
